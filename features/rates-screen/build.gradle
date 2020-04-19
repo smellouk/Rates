@@ -1,0 +1,23 @@
+apply plugin: 'rates-android-module'
+
+dependencies {
+    implementation project(':common')
+    implementation project(":repositories:remote")
+
+    testImplementation Libs.mockk
+    testImplementation Libs.junit_junit
+    testImplementation Libs.core_testing
+
+    implementation Libs.appcompat
+    implementation Libs.core_ktx
+    implementation Libs.constraintlayout
+
+    implementation Libs.dagger
+    kapt Libs.dagger_compiler
+
+    implementation Libs.rxjava
+    implementation Libs.rxandroid
+
+    implementation Libs.cardview
+    implementation Libs.picasso
+}

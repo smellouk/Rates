@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
 
 abstract class BaseFragment<
-        ComponentProvider : Any,
+        ComponentProvider : BaseComponentProvider,
         State : BaseViewState,
         ViewModel : BaseViewModel<State>
         >(layout: Int) :

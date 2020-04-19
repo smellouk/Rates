@@ -1,12 +1,15 @@
 apply plugin: 'rates-app'
 
 dependencies {
+    implementation project(':common')
+    implementation project(":features")
+    implementation project(":repositories")
+
     androidTestImplementation Libs.androidx_test_ext_junit
     androidTestImplementation Libs.espresso_core
     androidTestImplementation Libs.androidx_test_runner
     androidTestImplementation Libs.androidx_test_rules
     androidTestImplementation Libs.espresso_contrib
-    compileOnly Libs.espresso_idling_resource
 
     implementation Libs.appcompat
     implementation Libs.core_ktx

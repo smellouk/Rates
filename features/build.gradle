@@ -1,5 +1,6 @@
 apply plugin: 'rates-android-module'
 
 dependencies {
-    implementation project(":features:rates")
+    api project(":features:main")
+    implementation project(':features:rates-screen')
 }

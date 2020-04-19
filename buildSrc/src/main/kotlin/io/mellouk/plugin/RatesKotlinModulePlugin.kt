@@ -7,7 +7,7 @@ import org.gradle.api.Project
 
 class RatesKotlinModulePlugin: Plugin<Project> {
     override fun apply(target: Project) {
-        target.plugins.apply(kotlinKaptPlugin)
         target.plugins.apply(kotlinPlugin)
+        target.plugins.apply(kotlinKaptPlugin)
     }
 }

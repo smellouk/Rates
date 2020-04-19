@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/rate_list_fragment">
+    <action
+        android:id="@+id/show_rates_list"
+        app:destination="@id/rate_list_fragment"
+        app:popUpTo="@id/nav_main" />
+
+    <fragment
+        android:id="@+id/rate_list_fragment"
+        android:name="io.mellouk.ratesscreen.RateListFragment"
+        android:label="@string/label_fragment_rate_list" />
+</navigation>

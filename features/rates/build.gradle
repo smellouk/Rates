@@ -1,4 +1,0 @@
-apply plugin: 'rates-android-module'
-
-dependencies {
-}

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
 
 abstract class BaseActivity<
-        ComponentProvider : Any,
+        ComponentProvider : BaseComponentProvider,
         State : BaseViewState,
         ViewModel : BaseViewModel<State>
         >(layout: Int) :
