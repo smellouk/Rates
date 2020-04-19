@@ -1,0 +1,5 @@
+apply plugin: 'rates-android-module'
+
+dependencies {
+    implementation project(":features:rates")
+}

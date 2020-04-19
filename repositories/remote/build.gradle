@@ -1,0 +1,16 @@
+apply plugin: 'rates-kotlin-module'
+
+dependencies {
+    implementation Libs.dagger
+    kapt Libs.dagger_compiler
+
+    implementation Libs.retrofit
+    implementation Libs.converter_gson
+    implementation Libs.adapter_rxjava2
+    implementation Libs.logging_interceptor
+
+    implementation Libs.rxjava
+
+    testImplementation Libs.mockk
+    testImplementation Libs.junit_junit
+}
