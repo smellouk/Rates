@@ -21,7 +21,7 @@ class RatesApp : Application(), MainComponentProvider, RateListComponentProvider
                     this
                 )
             )
-            .domainModule(DomainModule(BuildConfig.DEBUG))
+            .domainModule(DomainModule(BuildConfig.BASE_URL, BuildConfig.DEBUG))
             .build()
     }
 

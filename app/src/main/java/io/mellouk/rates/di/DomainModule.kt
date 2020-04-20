@@ -7,11 +7,12 @@ import io.mellouk.repositories.remote.RemoteRepositories
 import okhttp3.Interceptor
 
 @Module
-class DomainModule(private val isDebug: Boolean) {
+class DomainModule(private val hostUrl: String, private val isDebug: Boolean) {
     @ApplicationScope
     @Provides
     fun provideGitHubRepositories(chuckerInterceptor: ChuckerInterceptor): RemoteRepositories =
         RemoteRepositories(
+            hostUrl,
             isDebug = isDebug,
             debugInterceptors = listOf<Interceptor>(chuckerInterceptor)
         )

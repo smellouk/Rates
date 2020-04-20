@@ -1,5 +1,16 @@
 apply plugin: 'rates-app'
 
+android.buildTypes {
+    debug {
+        applicationIdSuffix '.dev'
+        resValue "string", "app_name", "Rates dev"
+    }
+
+    release {
+        resValue "string", "app_name", "Rates"
+    }
+}
+
 dependencies {
     implementation project(':common')
     implementation project(":features")

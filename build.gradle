@@ -52,10 +52,47 @@ subprojects {
                     vectorDrawables.useSupportLibrary = true
                 }
 
+                signingConfigs {
+                    release {
+                        //Correct to set signing key is :
+                        //to use local properties or environment variable or common build gradle file
+                        storeFile file("signing/signing_key.jks")
+                        storePassword '123456789'
+                        keyAlias 'Rates'
+                        keyPassword '123456789'
+                    }
+                }
+
                 buildTypes {
+                    debug {
+                        debuggable true
+                        minifyEnabled false
+                    }
+
                     release {
                         minifyEnabled true
+                        signingConfig signingConfigs.release
                         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    }
+                }
+
+                flavorDimensions("endpoint")
+                productFlavors {
+                    dev {
+                        dimension "endpoint"
+                        buildConfigField 'String', 'BASE_URL', '"https://hiring.revolut.codes"'
+                    }
+
+                    prod {
+                        dimension "endpoint"
+                        buildConfigField 'String', 'BASE_URL', '"https://hiring.revolut.codes"'
+                    }
+                }
+
+                variantFilter { variant ->
+                    if (variant.buildType.name == 'release'
+                            && variant.getFlavors().get(0).name == 'dev') {
+                        variant.setIgnore(true)
                     }
                 }
             }

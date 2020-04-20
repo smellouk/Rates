@@ -7,6 +7,7 @@ import okhttp3.Interceptor
 import javax.inject.Inject
 
 class RemoteRepositories(
+    hostUrl: String,
     isDebug: Boolean = true,
     debugInterceptors: List<Interceptor> = emptyList()
 ) {
@@ -15,7 +16,7 @@ class RemoteRepositories(
 
     init {
         DaggerRemoteRepositoriesComponent.builder()
-            .clientModule(ClientModule(isDebug, debugInterceptors))
+            .clientModule(ClientModule(hostUrl, isDebug, debugInterceptors))
             .build()
             .apply {
                 inject(this@RemoteRepositories)

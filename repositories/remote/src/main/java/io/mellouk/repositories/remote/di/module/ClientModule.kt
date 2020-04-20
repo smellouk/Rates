@@ -24,7 +24,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class ClientModule(private val isDebug: Boolean, private val debugInterceptors: List<Interceptor>) {
+class ClientModule(
+    private val hostUrl: String,
+    private val isDebug: Boolean,
+    private val debugInterceptors: List<Interceptor>
+) {
     @Provides
     @Singleton
     fun isDebug() = DebugInfo(
@@ -40,13 +44,14 @@ class ClientModule(private val isDebug: Boolean, private val debugInterceptors: 
     @Provides
     @HostUrlInfo
     @Singleton
-    fun provideHostUrl() = Constants.HOST_URL
+    fun provideHostUrl() = hostUrl
 
     @Provides
     @Singleton
-    fun provideHttpUrl() = Constants.HOST_URL.toHttpUrlOrNull() ?: throw IllegalArgumentException(
-        "Wrong url format"
-    )
+    fun provideHttpUrl(@HostUrlInfo hostUrl: String) =
+        hostUrl.toHttpUrlOrNull() ?: throw IllegalArgumentException(
+            "Wrong url format"
+        )
 
     @Provides
     @RetryCountInfo
