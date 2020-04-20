@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ErrorTextAppearance">
+        <item name="android:textSize">@dimen/error_view_text_size</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
+</resources>

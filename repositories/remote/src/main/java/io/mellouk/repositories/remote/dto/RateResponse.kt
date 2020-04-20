@@ -10,4 +10,4 @@ data class RateResponse(
     val rates: RateList? = null
 )
 
-class RateList : ArrayList<Rate>()
+class RateList : ArrayList<RateDto>()

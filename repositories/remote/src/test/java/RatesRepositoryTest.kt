@@ -1,8 +1,8 @@
 import com.google.gson.GsonBuilder
 import io.mellouk.repositories.remote.dto.RateList
 import io.mellouk.repositories.remote.dto.RateResponse
-import io.mellouk.repositories.remote.dto.RatesAdapter
-import io.mellouk.repositories.remote.network.repositories.RatesRepository
+import io.mellouk.repositories.remote.dto.RatesDeserializer
+import io.mellouk.repositories.remote.network.repositories.RemoteRatesRepository
 import io.mellouk.repositories.remote.network.services.RatesService
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -15,12 +15,12 @@ class RatesRepositoryTest {
     @RelaxedMockK
     lateinit var ratesService: RatesService
 
-    private lateinit var ratesRepository: RatesRepository
+    private lateinit var remoteRatesRepository: RemoteRatesRepository
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        ratesRepository = RatesRepository(ratesService)
+        remoteRatesRepository = RemoteRatesRepository(ratesService)
     }
 
     @Test
@@ -29,7 +29,7 @@ class RatesRepositoryTest {
             ratesService.getRates(givenCode)
         } returns Single.just(givenResponse)
 
-        ratesRepository.getRates(givenCode)
+        remoteRatesRepository.getRates(givenCode)
             .test()
             .apply {
                 assertComplete()
@@ -48,7 +48,7 @@ private const val givenCode = "EUR"
 private val gson = GsonBuilder()
     .registerTypeAdapter(
         RateList::class.java,
-        RatesAdapter()
+        RatesDeserializer()
     )
     .create()
 private const val givenJson = """

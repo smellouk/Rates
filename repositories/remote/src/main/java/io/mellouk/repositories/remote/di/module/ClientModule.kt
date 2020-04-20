@@ -7,7 +7,7 @@ import dagger.Provides
 import io.mellouk.repositories.remote.di.qualifier.HostUrlInfo
 import io.mellouk.repositories.remote.di.qualifier.RetryCountInfo
 import io.mellouk.repositories.remote.dto.RateList
-import io.mellouk.repositories.remote.dto.RatesAdapter
+import io.mellouk.repositories.remote.dto.RatesDeserializer
 import io.mellouk.repositories.remote.utils.Constants
 import io.mellouk.repositories.remote.utils.DebugInfo
 import io.mellouk.repositories.remote.utils.RetryInterceptor
@@ -68,7 +68,7 @@ class ClientModule(private val isDebug: Boolean, private val debugInterceptors: 
     fun provideGson(): Gson = GsonBuilder()
         .registerTypeAdapter(
             RateList::class.java,
-            RatesAdapter()
+            RatesDeserializer()
         )
         .create()
 

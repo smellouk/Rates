@@ -1,11 +1,12 @@
 package io.mellouk.repositories.remote.dto
 
-data class Rate(
-    val currency: Currency,
+data class RateDto(
+    val currency: CurrencyDto,
     val value: Double
 )
 
-enum class Currency(val code: String) {
+enum class CurrencyDto(val code: String) {
+    EUR("EUR"),
     AUD("AUD"),
     BGN("BGN"),
     BRL("BRL"),

@@ -4,13 +4,10 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
-import io.mellouk.repositories.remote.RemoteRepositories
-import okhttp3.Interceptor
 
 @Module
 class AppModule(
-    private val context: Context,
-    private val isDebug: Boolean
+    private val context: Context
 ) {
     @ApplicationScope
     @Provides
@@ -19,12 +16,4 @@ class AppModule(
     @ApplicationScope
     @Provides
     fun provideChucker(): ChuckerInterceptor = ChuckerInterceptor(context)
-
-    @ApplicationScope
-    @Provides
-    fun provideRemoteRepositories(chuckerInterceptor: ChuckerInterceptor): RemoteRepositories =
-        RemoteRepositories(
-            isDebug = isDebug,
-            debugInterceptors = listOf<Interceptor>(chuckerInterceptor)
-        )
 }

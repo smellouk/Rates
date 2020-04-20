@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/default_padding"
+    android:paddingTop="@dimen/default_medium_padding"
+    android:paddingEnd="@dimen/default_padding"
+    android:paddingBottom="@dimen/default_medium_padding">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imFlag"
+        android:layout_width="@dimen/size_image_flag"
+        android:layout_height="@dimen/size_image_flag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_error" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/currency_code_size_text"
+        app:layout_constraintBottom_toTopOf="@id/tvName"
+        app:layout_constraintEnd_toStartOf="@id/etRate"
+        app:layout_constraintStart_toEndOf="@id/imFlag"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="EUR" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="@dimen/currency_name_size_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/etRate"
+        app:layout_constraintStart_toEndOf="@id/imFlag"
+        app:layout_constraintTop_toBottomOf="@+id/tvCode"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Euro" />
+
+    <EditText
+        android:id="@+id/etRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_currency_edit_text"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:maxLength="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1.11" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package io.mellouk.common.domain
 
-import io.reactivex.Observable
+import io.reactivex.Single
 
 interface BaseUseCase<Params : BaseParams, DataState : BaseDataState> {
-    fun buildObservable(params: Params): Observable<DataState>
+    fun buildObservable(params: Params): Single<DataState>
 }

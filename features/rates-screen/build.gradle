@@ -18,6 +18,7 @@ dependencies {
     implementation Libs.rxjava
     implementation Libs.rxandroid
 
+    implementation Libs.recyclerview
     implementation Libs.cardview
     implementation Libs.picasso
 }

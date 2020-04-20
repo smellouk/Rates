@@ -1,12 +1,12 @@
 import com.google.gson.JsonParser
-import io.mellouk.repositories.remote.dto.Currency
+import io.mellouk.repositories.remote.dto.CurrencyDto
 import io.mellouk.repositories.remote.dto.RateList
-import io.mellouk.repositories.remote.dto.RatesAdapter
+import io.mellouk.repositories.remote.dto.RatesDeserializer
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RatesAdapterTest {
-    private val ratesAdapter = RatesAdapter()
+    private val ratesAdapter = RatesDeserializer()
 
     @Test
     fun deserialize_ShouldDeserializeRatesCorrectly() {
@@ -18,7 +18,7 @@ class RatesAdapterTest {
 
     private fun hasUnknownCurrency(rateList: RateList): Boolean {
         val rate = rateList.firstOrNull { rate ->
-            rate.currency == Currency.UNKNOWN
+            rate.currency == CurrencyDto.UNKNOWN
         }
 
         return rate != null

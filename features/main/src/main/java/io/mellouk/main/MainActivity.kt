@@ -26,7 +26,7 @@ class MainActivity : BaseActivity<MainComponentProvider, ViewState, MainViewMode
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        navController.setGraph(R.navigation.main_nav, savedInstanceState)
+        navController.setGraph(R.navigation.nav_main, savedInstanceState)
     }
 
     override fun renderViewState(state: ViewState) {

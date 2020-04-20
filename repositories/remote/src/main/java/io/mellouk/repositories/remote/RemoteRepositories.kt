@@ -2,7 +2,7 @@ package io.mellouk.repositories.remote
 
 import io.mellouk.repositories.remote.di.component.DaggerRemoteRepositoriesComponent
 import io.mellouk.repositories.remote.di.module.ClientModule
-import io.mellouk.repositories.remote.network.repositories.RatesRepository
+import io.mellouk.repositories.remote.network.repositories.RemoteRatesRepository
 import okhttp3.Interceptor
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ class RemoteRepositories(
     debugInterceptors: List<Interceptor> = emptyList()
 ) {
     @Inject
-    lateinit var ratesRepository: RatesRepository
+    lateinit var remoteRatesRepository: RemoteRatesRepository
 
     init {
         DaggerRemoteRepositoriesComponent.builder()
