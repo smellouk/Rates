@@ -65,7 +65,7 @@ class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, Rate
     }
 
     private fun requestLatestRatesView(code: String) {
-        errorView.hide()
+        tvError.hide()
         rvRates.show()
         viewModel.onCommand(
             GetRates(
@@ -76,8 +76,8 @@ class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, Rate
 
     private fun renderErrorView(state: Error) {
         tvError.text = state.message
+        tvError.show()
         rvRates.hide()
-        errorView.show()
         progress.hide()
     }
 
