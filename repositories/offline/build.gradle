@@ -1,0 +1,11 @@
+apply plugin: 'rates-android-module'
+
+dependencies {
+    implementation Libs.dagger
+    kapt Libs.dagger_compiler
+
+    implementation Libs.rxjava
+
+    testImplementation Libs.mockk
+    testImplementation Libs.junit_junit
+}

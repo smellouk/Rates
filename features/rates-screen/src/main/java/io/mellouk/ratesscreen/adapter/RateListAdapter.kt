@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import io.mellouk.common.models.RateUi
+import io.mellouk.ratesscreen.DEFAULT_MULTIPLIER
 import io.mellouk.ratesscreen.R
-import io.mellouk.ratesscreen.domain.DEFAULT_MULTIPLIER
 
 class RateListAdapter(
     private val onItemClick: (RateUi) -> Unit,
-    private val onBaseCurrencyChanged: (String) -> Unit,
-    private val defaultBaseCurrencyValue: String = DEFAULT_MULTIPLIER.toString()
+    private val onBaseCurrencyChanged: (RateUi) -> Unit,
+    private val onFocusChanged: (Boolean, RateUi) -> Unit,
+    private val defaultBaseCurrencyValue: String = DEFAULT_MULTIPLIER
 ) : ListAdapter<RateUi, RateViewHolder>(RateItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RateViewHolder(
@@ -18,19 +19,19 @@ class RateListAdapter(
             R.layout.rates_list_item, parent, false
         ).apply {
             setOnClickListener {
-                onItemClick((tag as RateUi))
+                val position = tag as Int
+                onItemClick(getItem(position))
             }
         }
     )
 
     override fun onBindViewHolder(holder: RateViewHolder, position: Int) {
-        getItem(position).let { item ->
-            holder.itemView.tag = item
-            holder.bind(
-                item,
-                onBaseCurrencyChanged,
-                defaultBaseCurrencyValue
-            )
-        }
+        holder.itemView.tag = position
+        holder.bind(
+            this,
+            onBaseCurrencyChanged,
+            onFocusChanged,
+            defaultBaseCurrencyValue
+        )
     }
 }

@@ -20,4 +20,4 @@ fun View.hide() {
     this.isVisible = false
 }
 
-fun String.safeToDouble() = this.toDoubleOrNull() ?: 0.0
+fun String.toSafeFloat() = this.toFloatOrNull() ?: 0F

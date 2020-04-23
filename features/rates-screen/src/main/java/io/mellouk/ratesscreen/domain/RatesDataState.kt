@@ -6,3 +6,5 @@ import io.mellouk.common.models.RateUi
 sealed class RatesDataState : BaseDataState
 
 class SuccessfulRatesState(val rateList: List<RateUi>) : RatesDataState()
+
+class SuccessfulUpdatedRatesState(val rateList: List<RateUi>) : RatesDataState()

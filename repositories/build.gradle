@@ -2,4 +2,5 @@ apply plugin: 'rates-android-module'
 
 dependencies {
     api project(":repositories:remote")
+    api project(":repositories:offline")
 }

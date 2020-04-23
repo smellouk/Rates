@@ -1,14 +1,15 @@
 package io.mellouk.ratesscreen
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import io.mellouk.ratesscreen.Command.GetRates
 import io.mellouk.ratesscreen.ViewState.Initial
 import io.mellouk.ratesscreen.ViewState.RateListReady
-import io.mellouk.ratesscreen.domain.GetRatesParams
-import io.mellouk.ratesscreen.domain.GetRatesUseCase
 import io.mellouk.ratesscreen.domain.SuccessfulRatesState
+import io.mellouk.ratesscreen.domain.calculaterates.CalculateRatesUseCase
+import io.mellouk.ratesscreen.domain.getrates.GetRatesUseCase
+import io.mellouk.ratesscreen.domain.persistbasecurrency.PersistBaseCurrencyUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
 import io.reactivex.Single
@@ -32,14 +33,20 @@ class RateListViewModelTest {
     lateinit var getRatesUseCase: GetRatesUseCase
 
     @RelaxedMockK
+    lateinit var persistBaseCurrencyUseCase: PersistBaseCurrencyUseCase
+
+    @RelaxedMockK
+    lateinit var calculateRatesUseCase: CalculateRatesUseCase
+
+    @RelaxedMockK
     lateinit var viewStateMapper: ViewStateMapper
 
-    private lateinit var viewModel: RateListViewModel
+    @InjectMockKs
+    lateinit var viewModel: RateListViewModel
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        viewModel = RateListViewModel(getRatesUseCase, viewStateMapper)
     }
 
     @Test
@@ -50,7 +57,7 @@ class RateListViewModelTest {
     @Test
     fun onCommandGetRates_ShouldGetLatestRates() {
         every {
-            getRatesUseCase.buildObservable(givenGetParams)
+            getRatesUseCase.buildObservable()
         } returns Single.just(givenSuccessfulRatesState)
 
         every {
@@ -61,15 +68,13 @@ class RateListViewModelTest {
         testScheduler.advanceTimeTo(1, TimeUnit.SECONDS)
 
         verify {
-            getRatesUseCase.buildObservable(givenGetParams)
+            getRatesUseCase.buildObservable()
             viewStateMapper.map(givenSuccessfulRatesState)
         }
         assertEquals(viewModel.liveData.value, givenReadyListViewState)
     }
 }
 
-private const val givenCode = "EUR"
-private val givenGetParams = GetRatesParams(code = givenCode)
-private val givenGetCommand = GetRates(givenGetParams)
+private val givenGetCommand = Command.RestartRatesWatcher(true)
 private val givenSuccessfulRatesState = SuccessfulRatesState(listOf())
 private val givenReadyListViewState = RateListReady(givenSuccessfulRatesState.rateList)

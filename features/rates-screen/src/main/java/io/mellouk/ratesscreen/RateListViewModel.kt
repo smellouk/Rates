@@ -3,13 +3,16 @@ package io.mellouk.ratesscreen
 import io.mellouk.common.Commandable
 import io.mellouk.common.base.BaseViewModel
 import io.mellouk.common.exhaustive
-import io.mellouk.common.safeToDouble
 import io.mellouk.ratesscreen.Command.*
 import io.mellouk.ratesscreen.ViewState.*
 import io.mellouk.ratesscreen.di.RateListScope
-import io.mellouk.ratesscreen.domain.GetRatesParams
-import io.mellouk.ratesscreen.domain.GetRatesUseCase
+import io.mellouk.ratesscreen.domain.calculaterates.CalculateRatesParams
+import io.mellouk.ratesscreen.domain.calculaterates.CalculateRatesUseCase
+import io.mellouk.ratesscreen.domain.getrates.GetRatesUseCase
+import io.mellouk.ratesscreen.domain.persistbasecurrency.PersistBaseCurrencyParams
+import io.mellouk.ratesscreen.domain.persistbasecurrency.PersistBaseCurrencyUseCase
 import io.reactivex.Flowable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -17,15 +20,12 @@ import javax.inject.Inject
 @RateListScope
 class RateListViewModel @Inject constructor(
     private val getRatesUseCase: GetRatesUseCase,
+    private val persistBaseCurrencyUseCase: PersistBaseCurrencyUseCase,
+    private var calculateRatesUseCase: CalculateRatesUseCase,
     private val viewStateMapper: ViewStateMapper
 ) : BaseViewModel<ViewState>(), Commandable<Command> {
-    private var currentGetParams: GetRatesParams = GetRatesParams(
-        code = INITIAL_CURRENCY
-    )
-
-    init {
-        startGettingRates()
-    }
+    private var currentIntervalDisposable: Disposable? = null
+    private var currentRateCalculatorDisposable: Disposable? = null
 
     override fun getInitialState(): ViewState = Initial
 
@@ -38,17 +38,19 @@ class RateListViewModel @Inject constructor(
             .onBackpressureDrop()
             .retry()
             .flatMapSingle {
-                getRatesUseCase.buildObservable(currentGetParams)
+                getRatesUseCase.buildObservable()
             }.toObservable()
 
     private fun commandHandler(cmd: Command) = when (cmd) {
-        is RestartRates -> startGettingRates(cmd.isConnected)
-        is GetRates -> setCurrentGetParam(cmd)
-        is UpdateBaseCurrencyValue -> updateCurrentGetParam(cmd)
+        is RestartRatesWatcher -> onStartRatesWatcher(cmd.isConnected)
+        is UpdateBaseCurrency -> onUpdateCurrentBaseCurrency(cmd)
+        is CalculateNewRates -> onCalculateNewRates(cmd)
+        is StopRatesWatcher -> onStopRatesWatcher()
     }.exhaustive
 
-    private fun startGettingRates(isConnected: Boolean = true) = if (isConnected) {
-        addObservable(
+    private fun onStartRatesWatcher(isConnected: Boolean = true) = if (isConnected) {
+        currentIntervalDisposable?.dispose()
+        currentIntervalDisposable = addObservable(
             source = buildObservable(),
             onNext = { dataState ->
                 liveData.value = viewStateMapper.map(dataState)
@@ -62,16 +64,52 @@ class RateListViewModel @Inject constructor(
         Error("Network is not available!")
     }
 
-    private fun setCurrentGetParam(cmd: GetRates): Pending {
-        currentGetParams = cmd.params
+    private fun onCalculateNewRates(cmd: CalculateNewRates): Pending {
+        currentRateCalculatorDisposable?.dispose()
+        currentRateCalculatorDisposable = addObservable(
+            source = calculateRatesUseCase.buildObservable(
+                CalculateRatesParams(
+                    baseRate = cmd.baseRate,
+                    rates = cmd.rates
+                )
+            ),
+            onNext = { dataState ->
+                liveData.value = viewStateMapper.map(dataState)
+            },
+            onError = { throwable ->
+                liveData.value = viewStateMapper.map(throwable)
+            }
+        )
         return Pending
     }
 
-    private fun updateCurrentGetParam(cmd: UpdateBaseCurrencyValue): Pending {
-        currentGetParams = currentGetParams.copy(multiplier = cmd.value.safeToDouble())
+    private fun onUpdateCurrentBaseCurrency(cmd: UpdateBaseCurrency) = with(cmd) {
+        addObservable(
+            source = calculateRatesUseCase.buildObservable(
+                CalculateRatesParams(
+                    baseRate = cmd.baseRate,
+                    rates = cmd.rates
+                )
+            ),
+            onNext = { dataState ->
+                addCompletable(
+                    persistBaseCurrencyUseCase.buildObservable(
+                        PersistBaseCurrencyParams(baseRate.currency, DEFAULT_MULTIPLIER)
+                    )
+                )
+                liveData.value = viewStateMapper.map(dataState)
+            },
+            onError = { throwable ->
+                liveData.value = viewStateMapper.map(throwable)
+            }
+        )
+        Pending
+    }
+
+    private fun onStopRatesWatcher(): Pending {
+        currentIntervalDisposable?.dispose()
         return Pending
     }
 }
 
 private const val FREQUENCY = 1L
-private const val INITIAL_CURRENCY = "EUR"

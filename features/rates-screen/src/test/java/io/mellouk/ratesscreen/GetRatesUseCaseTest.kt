@@ -1,9 +1,10 @@
 package io.mellouk.ratesscreen
 
-import io.mellouk.ratesscreen.domain.GetRatesParams
-import io.mellouk.ratesscreen.domain.GetRatesUseCase
+import io.mellouk.offline.model.RateEntity
+import io.mellouk.offline.sharedprefs.BaseCurrencyRepository
 import io.mellouk.ratesscreen.domain.RatesMapper
 import io.mellouk.ratesscreen.domain.SuccessfulRatesState
+import io.mellouk.ratesscreen.domain.getrates.GetRatesUseCase
 import io.mellouk.repositories.remote.dto.CurrencyDto
 import io.mellouk.repositories.remote.dto.RateDto
 import io.mellouk.repositories.remote.dto.RateList
@@ -20,13 +21,21 @@ class GetRatesUseCaseTest {
     @RelaxedMockK
     lateinit var remoteRatesRepository: RemoteRatesRepository
 
+    @RelaxedMockK
+    lateinit var baseCurrencyRepository: BaseCurrencyRepository
+
     private lateinit var getRatesUseCase: GetRatesUseCase
+
     private val ratesMapper = RatesMapper()
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        getRatesUseCase = GetRatesUseCase(remoteRatesRepository, ratesMapper)
+        getRatesUseCase = GetRatesUseCase(
+            remoteRatesRepository,
+            baseCurrencyRepository,
+            ratesMapper
+        )
     }
 
     @Test
@@ -35,7 +44,11 @@ class GetRatesUseCaseTest {
             remoteRatesRepository.getRates(givenCode)
         } returns Single.just(givenResponse)
 
-        getRatesUseCase.buildObservable(givenParams).test()
+        every {
+            baseCurrencyRepository.current()
+        } returns givenRateEntity
+
+        getRatesUseCase.buildObservable().test()
             .apply {
                 assertComplete()
                 assertNoErrors()
@@ -49,7 +62,7 @@ class GetRatesUseCaseTest {
 }
 
 private const val givenCode = "EUR"
-private val givenParams = GetRatesParams(givenCode)
+private val givenRateEntity = RateEntity(givenCode, 1f)
 private val givenResponse = RateResponse(baseCurrency = givenCode, rates = RateList().apply {
-    add(RateDto(CurrencyDto.EUR, 1.0))
+    add(RateDto(CurrencyDto.EUR, 1f))
 })

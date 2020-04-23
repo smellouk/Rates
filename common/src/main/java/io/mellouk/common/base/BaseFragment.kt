@@ -28,10 +28,8 @@ abstract class BaseFragment<
 
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         viewModel = viewModelProvider[getViewModelClass()]
-        viewModel.liveData.observe(
-            this,
-            Observer { renderViewState(it) }
-        )
+        startObserving()
+        retainInstance = true
     }
 
     abstract fun getViewModelClass(): Class<out ViewModel>
@@ -51,4 +49,15 @@ abstract class BaseFragment<
     abstract fun inject()
 
     abstract fun renderViewState(state: State)
+
+    fun startObserving() {
+        viewModel.liveData.observe(
+            this,
+            Observer { renderViewState(it) }
+        )
+    }
+
+    fun stopObserving() {
+        viewModel.liveData.removeObservers(this)
+    }
 }

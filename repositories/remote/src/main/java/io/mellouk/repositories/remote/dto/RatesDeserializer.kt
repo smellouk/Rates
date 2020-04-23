@@ -14,7 +14,7 @@ class RatesDeserializer : JsonDeserializer<RateList> {
     ): RateList = RateList().apply {
         toJsonObject(json)?.let { jsonObject ->
             jsonObject.keySet().forEach { code ->
-                add(RateDto(toCurrency(code), jsonObject[code].asDouble))
+                add(RateDto(toCurrency(code), jsonObject[code].asFloat))
             }
         }
     }

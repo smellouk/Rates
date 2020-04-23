@@ -26,6 +26,11 @@ class MainActivity : BaseActivity<MainComponentProvider, ViewState, MainViewMode
         componentProvider.getMainComponent().inject(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        networkWatcher.star()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         navController.setGraph(R.navigation.nav_main, savedInstanceState)

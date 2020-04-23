@@ -3,6 +3,7 @@ apply plugin: 'rates-android-module'
 dependencies {
     implementation project(':common')
     implementation project(":repositories:remote")
+    implementation project(":repositories:offline")
 
     testImplementation Libs.mockk
     testImplementation Libs.junit_junit
@@ -21,4 +22,6 @@ dependencies {
     implementation Libs.recyclerview
     implementation Libs.cardview
     implementation Libs.picasso
+    
+    implementation Libs.keyboardvisibilityevent
 }

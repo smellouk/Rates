@@ -7,42 +7,52 @@ import android.widget.EditText
 import androidx.annotation.DrawableRes
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import io.mellouk.common.models.EditableRateUi
 import io.mellouk.common.models.RateUi
 import io.mellouk.ratesscreen.R
 import kotlinx.android.synthetic.main.rates_list_item.view.*
 
 class RateViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(
-        item: RateUi,
-        onBaseCurrencyChanged: (String) -> Unit,
+        listAdapter: RateListAdapter,
+        onBaseCurrencyChanged: (RateUi) -> Unit,
+        onFocusChanged: (Boolean, RateUi) -> Unit,
         defaultValue: String
     ) {
         with(itemView) {
-            imFlag.setImageResource(resolveImageCurrencyCode(item.currency, context))
+            val position = tag as Int
+            val item = listAdapter.currentList[position]
+
+            imFlag.setImageResource(
+                resolveImageCurrencyCode(
+                    item.currency,
+                    context
+                )
+            )
             tvCode.text = item.currency
             tvName.text = item.name
-            if (item is EditableRateUi) {
-                etRate.isEnabled = true
-                etRate.doAfterTextChanged { editable ->
-                    if (etRate.hasFocus()) {
-                        editable?.toString()?.let { value ->
-                            if (value.isBlank()) {
-                                etRate.setText(defaultValue)
-                            } else {
-                                item.value = value
-                                onBaseCurrencyChanged(value)
-                            }
+
+            etRate.removeTextWatcher()
+            etRate.setText(item.value)
+            etRate.doAfterTextChanged { editable ->
+                if (etRate.hasFocus()) {
+                    val baseRate = listAdapter.currentList[position]
+                    editable?.toString()?.let { value ->
+                        if (value.isBlank()) {
+                            etRate.setText(defaultValue)
+                        } else {
+                            baseRate.value = value
+                            onBaseCurrencyChanged(baseRate)
                         }
                     }
-                }.apply {
-                    etRate.tag = this
                 }
-            } else {
-                etRate.isEnabled = false
-                etRate.removeTextWatcher()
+            }.apply {
+                etRate.tag = this
             }
-            etRate.setText(item.value)
+
+            etRate.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+                val baseRate = listAdapter.currentList[position]
+                onFocusChanged(hasFocus, baseRate)
+            }
         }
     }
 

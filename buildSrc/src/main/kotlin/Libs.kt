@@ -30,12 +30,6 @@ object Libs {
             Versions.androidx_test_espresso
 
     /**
-     * https://developer.android.com/testing
-     */
-    const val espresso_idling_resource: String =
-        "androidx.test.espresso:espresso-idling-resource:" + Versions.androidx_test_espresso
-
-    /**
      * https://github.com/square/retrofit/
      */
     const val adapter_rxjava2: String = "com.squareup.retrofit2:adapter-rxjava2:" +
@@ -63,45 +57,6 @@ object Libs {
      * https://square.github.io/okhttp/
      */
     const val okhttp: String = "com.squareup.okhttp3:okhttp:" + Versions.com_squareup_okhttp3
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_android_extensions: String =
-        "org.jetbrains.kotlin:kotlin-android-extensions:" + Versions.org_jetbrains_kotlin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_android_extensions_runtime: String =
-        "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" +
-                Versions.org_jetbrains_kotlin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_annotation_processing_gradle: String =
-        "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" +
-                Versions.org_jetbrains_kotlin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_scripting_compiler_embeddable: String =
-        "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
-                Versions.org_jetbrains_kotlin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
-            Versions.org_jetbrains_kotlin
-
-    /**
-     * https://kotlinlang.org/
-     */
-    const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
-            Versions.org_jetbrains_kotlin
 
     /**
      * https://developer.android.com/topic/libraries/architecture/index.html
@@ -158,16 +113,53 @@ object Libs {
                 Versions.de_fayard_buildsrcversions_gradle_plugin
 
     /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_scripting_compiler_embeddable: String =
+        "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:" +
+                Versions.kotlin_scripting_compiler_embeddable
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_annotation_processing_gradle: String =
+        "org.jetbrains.kotlin:kotlin-annotation-processing-gradle:" +
+                Versions.kotlin_annotation_processing_gradle
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_android_extensions_runtime: String =
+        "org.jetbrains.kotlin:kotlin-android-extensions-runtime:" +
+                Versions.kotlin_android_extensions_runtime
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_android_extensions: String =
+        "org.jetbrains.kotlin:kotlin-android-extensions:" + Versions.kotlin_android_extensions
+
+    const val keyboardvisibilityevent: String =
+        "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:" +
+                Versions.keyboardvisibilityevent
+
+    /**
+     * https://kotlinlang.org/
+     */
+    const val kotlin_gradle_plugin: String = "org.jetbrains.kotlin:kotlin-gradle-plugin:" +
+            Versions.kotlin_gradle_plugin
+
+    /**
      * https://developer.android.com/topic/libraries/architecture/index.html
      */
     const val lifecycle_extensions: String = "androidx.lifecycle:lifecycle-extensions:" +
             Versions.lifecycle_extensions
 
     /**
-     * http://developer.android.com/tools/extras/support-library.html
+     * https://kotlinlang.org/
      */
-    const val swiperefreshlayout: String = "androidx.swiperefreshlayout:swiperefreshlayout:" +
-            Versions.swiperefreshlayout
+    const val kotlin_stdlib_jdk7: String = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:" +
+            Versions.kotlin_stdlib_jdk7
 
     /**
      * http://tools.android.com

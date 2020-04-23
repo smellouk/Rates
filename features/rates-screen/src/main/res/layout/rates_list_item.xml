@@ -59,7 +59,6 @@
         android:hint="@string/hint_currency_edit_text"
         android:inputType="numberDecimal"
         android:lines="1"
-        android:maxLength="7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

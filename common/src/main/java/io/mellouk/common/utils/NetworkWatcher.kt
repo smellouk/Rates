@@ -20,10 +20,10 @@ class NetworkWatcher(
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    private val connectivityReceiver = ConnectivityReceiver(listeners)
+    private var connectivityReceiver: ConnectivityReceiver = ConnectivityReceiver(listeners)
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private val networkCallback = NetworkCallback(listeners)
+    private var networkCallback: NetworkCallback = NetworkCallback(listeners)
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private val networkRequest = NetworkRequest.Builder()
@@ -31,7 +31,7 @@ class NetworkWatcher(
         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
         .build()
 
-    init {
+    fun star() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
         } else {

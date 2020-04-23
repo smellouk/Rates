@@ -2,7 +2,7 @@ package io.mellouk.repositories.remote.dto
 
 data class RateDto(
     val currency: CurrencyDto,
-    val value: Double
+    val value: Float
 )
 
 enum class CurrencyDto(val code: String) {

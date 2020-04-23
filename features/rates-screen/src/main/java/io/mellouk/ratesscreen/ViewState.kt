@@ -8,6 +8,7 @@ import io.mellouk.common.models.RateUi
 sealed class ViewState : BaseViewState {
     object Initial : ViewState()
     class RateListReady(val rateList: List<RateUi>) : ViewState()
+    class RateListUpdate(val rateList: List<RateUi>) : ViewState()
     object Pending : ViewState()
     class Error(val message: String?) : ViewState()
 }

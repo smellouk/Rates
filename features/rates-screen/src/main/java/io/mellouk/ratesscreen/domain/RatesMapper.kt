@@ -1,8 +1,8 @@
 package io.mellouk.ratesscreen.domain
 
-import io.mellouk.common.models.EditableRateUi
-import io.mellouk.common.models.NonEditableRateUi
 import io.mellouk.common.models.RateUi
+import io.mellouk.common.toSafeFloat
+import io.mellouk.offline.model.RateEntity
 import io.mellouk.repositories.remote.dto.RateDto
 import io.mellouk.repositories.remote.dto.RateResponse
 import java.text.DecimalFormat
@@ -11,40 +11,35 @@ import java.util.*
 class RatesMapper {
     private val formatter = DecimalFormat(RATE_FORMAT)
 
-    fun map(response: RateResponse, multiplier: Double): List<RateUi> {
-        val rates = response.rates?.map { dto ->
-            mapToNonEditableRate(dto = dto, multiplier = multiplier)
+    fun map(response: RateResponse, multiplier: Float): MutableList<RateUi> =
+        response.rates?.map { dto ->
+            map(dto = dto, multiplier = multiplier)
         }?.toMutableList() ?: mutableListOf()
 
-        rates.add(
-            0,
-            createEditableRate(
-                response.baseCurrency ?: "",
-                multiplier
-            )
-        )
-        return rates
-    }
-
-    private fun createEditableRate(baseCurrency: String, value: Double): RateUi {
-        val name = Currency.getInstance(baseCurrency).displayName.capitalize()
-        return EditableRateUi(
-            currency = baseCurrency,
-            name = name,
-            value = value.toFormattedRate()
-        )
-    }
-
-    private fun mapToNonEditableRate(dto: RateDto, multiplier: Double): RateUi = with(dto) {
-        val name = Currency.getInstance(currency.code).displayName.capitalize()
-        NonEditableRateUi(
+    fun map(dto: RateDto, multiplier: Float = 1F): RateUi = with(dto) {
+        RateUi(
             currency = currency.code,
-            name = name,
+            name = currency.code.toCurrencyName(),
             value = (value * multiplier).toFormattedRate()
         )
     }
 
-    private fun Double.toFormattedRate() = formatter.format(this)
+    fun map(entity: RateEntity): RateUi = with(entity) {
+        RateUi(
+            currency = currency,
+            name = currency.toCurrencyName(),
+            value = value.toFormattedRate()
+        )
+    }
+
+    fun map(currency: String, value: String): RateEntity = RateEntity(
+        currency = currency,
+        value = value.toSafeFloat()
+    )
+
+    private fun Float.toFormattedRate() = formatter.format(this)
+
+    private fun String.toCurrencyName() = Currency.getInstance(this).displayName.capitalize()
 }
 
 private const val RATE_FORMAT = "##.##"
