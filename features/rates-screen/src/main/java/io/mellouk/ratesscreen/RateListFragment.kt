@@ -8,21 +8,27 @@ import io.mellouk.common.exhaustive
 import io.mellouk.common.hide
 import io.mellouk.common.models.RateUi
 import io.mellouk.common.show
-import io.mellouk.ratesscreen.Command.GetRates
-import io.mellouk.ratesscreen.Command.UpdateBaseCurrencyValue
+import io.mellouk.common.utils.ConnectivityListener
+import io.mellouk.common.utils.NetworkWatcher
+import io.mellouk.ratesscreen.Command.*
 import io.mellouk.ratesscreen.ViewState.*
 import io.mellouk.ratesscreen.adapter.RateListAdapter
 import io.mellouk.ratesscreen.di.RateListComponentProvider
+import io.mellouk.ratesscreen.di.RateListScope
 import io.mellouk.ratesscreen.domain.GetRatesParams
 import kotlinx.android.synthetic.main.error_view.*
 import kotlinx.android.synthetic.main.fragment_rate_list.*
+import javax.inject.Inject
 
-
+@RateListScope
 class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, RateListViewModel>(
     R.layout.fragment_rate_list
 ) {
+    @Inject
+    lateinit var networkWatcher: NetworkWatcher
+
     private val onItemClick: (RateUi) -> Unit = { rateUi ->
-        requestLatestRatesView(rateUi.currency)
+        requestLatestRates(rateUi.currency)
     }
 
     private val onBaseCurrencyChanged: (String) -> Unit = { value ->
@@ -34,10 +40,23 @@ class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, Rate
         onBaseCurrencyChanged
     )
 
+    private val connectivityListener = object : ConnectivityListener {
+        override fun onNetworkChanged(isConnected: Boolean) {
+            activity?.runOnUiThread {
+                viewModel.onCommand(RestartRates(isConnected))
+            }
+        }
+    }
+
     override fun getViewModelClass() = RateListViewModel::class.java
 
     override fun inject() {
         componentProvider.getRateListComponent().inject(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        networkWatcher.registerListener(connectivityListener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,9 +83,14 @@ class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, Rate
         }.exhaustive
     }
 
-    private fun requestLatestRatesView(code: String) {
+    override fun onDestroy() {
+        networkWatcher.unregisterListener(connectivityListener)
+        super.onDestroy()
+    }
+
+    private fun requestLatestRates(code: String) {
         tvError.hide()
-        rvRates.show()
+        ratesView.show()
         viewModel.onCommand(
             GetRates(
                 GetRatesParams(code = code)
@@ -77,7 +101,7 @@ class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, Rate
     private fun renderErrorView(state: Error) {
         tvError.text = state.message
         tvError.show()
-        rvRates.hide()
+        ratesView.hide()
         progress.hide()
     }
 
@@ -87,6 +111,8 @@ class RateListFragment : BaseFragment<RateListComponentProvider, ViewState, Rate
 
     private fun renderRateList(state: RateListReady) {
         progress.hide()
+        tvError.hide()
+        ratesView.show()
         ratesAdapter.submitList(state.rateList)
     }
 }

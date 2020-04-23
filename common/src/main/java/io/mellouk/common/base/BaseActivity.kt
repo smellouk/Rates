@@ -1,9 +1,9 @@
 package io.mellouk.common.base
 
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import io.mellouk.common.utils.NetworkWatcher
 import javax.inject.Inject
 
 abstract class BaseActivity<
@@ -15,6 +15,9 @@ abstract class BaseActivity<
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    @Inject
+    lateinit var networkWatcher: NetworkWatcher
 
     lateinit var componentProvider: ComponentProvider
 

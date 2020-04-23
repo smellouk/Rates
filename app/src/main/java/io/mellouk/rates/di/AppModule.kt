@@ -4,6 +4,7 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
+import io.mellouk.common.utils.NetworkWatcher
 
 @Module
 class AppModule(
@@ -16,4 +17,8 @@ class AppModule(
     @ApplicationScope
     @Provides
     fun provideChucker(): ChuckerInterceptor = ChuckerInterceptor(context)
+
+    @ApplicationScope
+    @Provides
+    fun provideNetworkWatcher(context: Context) = NetworkWatcher(context)
 }

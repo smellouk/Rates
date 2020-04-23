@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="error_view_text_size">20sp</dimen>
+    <dimen name="error_view_text_size">16sp</dimen>
     <dimen name="size_image_flag">50dp</dimen>
     <dimen name="currency_code_size_text">16sp</dimen>
     <dimen name="currency_name_size_text">14sp</dimen>

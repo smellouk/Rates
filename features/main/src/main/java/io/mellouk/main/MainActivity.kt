@@ -6,6 +6,8 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.mellouk.common.base.BaseActivity
+import io.mellouk.common.exhaustive
+import io.mellouk.main.ViewState.Initial
 import io.mellouk.main.ViewState.RateList
 import io.mellouk.main.di.MainComponentProvider
 
@@ -31,8 +33,14 @@ class MainActivity : BaseActivity<MainComponentProvider, ViewState, MainViewMode
 
     override fun renderViewState(state: ViewState) {
         when (state) {
+            is Initial -> renderDefaultViewState()
             is RateList -> navigateTo(state.destination)
-        }
+        }.exhaustive
+    }
+
+    override fun onDestroy() {
+        networkWatcher.stop()
+        super.onDestroy()
     }
 
     private fun navigateTo(@IdRes destination: Int, bundle: Bundle? = null) {
